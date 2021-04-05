@@ -3,8 +3,7 @@
 } */
 
 body {
-	background: #EFEFBB;
-	background: linear-gradient(to right, rgb(197, 230, 236), rgb(239, 187, 230));
+	background: #efbbbb;
 	color: white;
 	margin: 0;
 	font-family: rubik;
@@ -34,6 +33,7 @@ h1 {
 	text-align: center;
 	border-radius: 20px;
 	position: relative;
+	z-index: 2;
 }
 
 .card::after {
@@ -96,6 +96,9 @@ h1 {
 .psychic {
 	background-color: #eaeda1;
 }
+.ghost{
+	background-color: #c0a6e9;
+}
 
 .flying {
 	background-color: #F5F5F5;
@@ -109,9 +112,12 @@ h1 {
 	background-color: #F5F5F5;
 }
 
-.card:hover {
-	animation: bounce 0.5s linear;
-}
+
+/* HOVER */
+
+
+
+/* END HOVER */
 
 .card-title {
 	text-transform: capitalize;
