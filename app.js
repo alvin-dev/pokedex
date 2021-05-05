@@ -1,42 +1,42 @@
-const findPokemon = () => {
-    // url da api com as informações dos pokemon
-    const getPokemonUrl = id => `https://pokeapi.co/api/v2/pokemon/${id}`
-    
-    //
-    const pokemonPromises = []
-    
-    // a cada execução do loop, apromise é adicionada a um array de promises 
-    for (let i = 1; i <= 96; i++) {
-        // fetch é um metodo que faz uma requisição http e traz dados da url especificada / esse metodo retorna uma promice 
-        // O método then() retorna uma Promise. Possui dois argumentos, ambos são "call back functions", sendo uma para o sucesso e outra para o fracasso da promessa.
-        // O método push() adiciona um ou mais elementos ao final de um array e retorna o novo comprimento desse array.
-        pokemonPromises.push(fetch(getPokemonUrl(i)).then(response => response.json()))
-    }
+// url da api com as informações dos pokemon
+const getPokemonUrl = id => `https://pokeapi.co/api/v2/pokemon/${id}`
 
-    //O método Promise.all(iterable) retorna uma única Promise que resolve quando todas as promises no argumento iterável forem resolvidas ou quando o iterável passado como argumento não contém promises.
-    Promise.all(pokemonPromises)
-        .then(pokemons => {
-            
-            const lisPokemons = pokemons.reduce((accumulator, pokemon) => {
-                //O método map() invoca a função callback passada por argumento para cada elemento do Array e devolve um novo Array como resultado.
-                const types = pokemon.types.map(typeInfo => typeInfo.type.name)
+// map com parametro underline '_' significa que nao vai usar este parametro 
+// fetch é um metodo que faz uma requisição http e traz dados da url especificada / esse metodo retorna uma promice 
+// O método then() retorna uma Promise. Possui dois argumentos, ambos são "call back functions", sendo uma para o sucesso e outra para o fracasso da promessa.
+const generatePokemonPromises = () => Array(150).fill().map((_, index) =>
+    fetch(getPokemonUrl(index + 1)).then(response => response.json()))
 
-                accumulator += `
-                <li class="card ${types[0]} ">
-                    <img class="card-image" alt"${pokemon.name}" src="https://pokeres.bastionbot.org/images/pokemon/${pokemon.id}.png" />
-                    <h2 class="card-title">${pokemon.id}. ${pokemon.name}</h2>
-                    <p class="card-subtitle">${types.join(' | ')}</p>
-                </li>
-                `
-                return accumulator
-            }, '')
+//O método reduce() executa uma função reducer (fornecida por você) para cada elemento do array, resultando num único valor de retorno.
+const generateHTML = pokemons => pokemons.reduce((accumulator, {name, id, types}) => {
+        //O método map() invoca a função callback passada por argumento para cada elemento do Array e devolve um novo Array como resultado.
+        const elementTypes = types.map(typeInfo => typeInfo.type.name)
 
-            const ul = document.querySelector('[data-js="pokedex"]')
+        accumulator += `
+        <li class="card ${elementTypes[0]} ">
+            <img class="card-image" alt"${name}" src="https://pokeres.bastionbot.org/images/pokemon/${id}.png" />
+            <h2 class="card-title">${id}. ${name}</h2>
+            <p class="card-subtitle">${elementTypes.join(' | ')}</p>
+        </li>
+        `
+        return accumulator
+    }, '')
 
-            ul.innerHTML = lisPokemons
-        })
-    
+
+const insertPokemonsIntoPage = pokemons => {
+    const ul = document.querySelector('[data-js="pokedex"]')
+    ul.innerHTML = pokemons
 }
+
+
+const pokemonPromises = generatePokemonPromises()
+
+//O método Promise.all(iterable) retorna uma única Promise que resolve quando todas as promises no argumento iterável forem resolvidas ou quando o iterável passado como argumento não contém promises.
+Promise.all(pokemonPromises)
+    .then(generateHTML)
+    .then(insertPokemonsIntoPage)
+    
+
 
 
 findPokemon()
