@@ -2,6 +2,7 @@
 const getPokemonUrl = id => `https://pokeapi.co/api/v2/pokemon/${id}`
 
 // map com parametro underline '_' significa que nao vai usar este parametro 
+// <img class="card-image" alt"${name}" src="https://pokeres.bastionbot.org/images/pokemon/${id}.png" />
 // fetch é um metodo que faz uma requisição http e traz dados da url especificada / esse metodo retorna uma promice 
 // O método then() retorna uma Promise. Possui dois argumentos, ambos são "call back functions", sendo uma para o sucesso e outra para o fracasso da promessa.
 const generatePokemonPromises = () => Array(150).fill().map((_, index) =>
@@ -14,7 +15,7 @@ const generateHTML = pokemons => pokemons.reduce((accumulator, {name, id, types}
 
         accumulator += `
         <li class="card ${elementTypes[0]} ">
-            <img class="card-image" alt"${name}" src="https://pokeres.bastionbot.org/images/pokemon/${id}.png" />
+            <img class="card-image" alt"${name}" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png" />
             <h2 class="card-title">${id}. ${name}</h2>
             <p class="card-subtitle">${elementTypes.join(' | ')}</p>
         </li>
@@ -39,4 +40,4 @@ Promise.all(pokemonPromises)
 
 
 
-findPokemon()
+//findPokemon()
